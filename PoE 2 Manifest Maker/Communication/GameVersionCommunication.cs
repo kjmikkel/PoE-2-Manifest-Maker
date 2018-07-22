@@ -6,7 +6,31 @@ namespace PoE_2_Manifest_Maker.Communication
 {
     public class GameVersionCommunication : BaseCommunication, IDataErrorInfo
     {
-        public String Version;
+        private static string minVersion;
+        private static string maxVersion;
+
+        public String _version;
+        public String Version
+        {
+            get
+            {
+                return _version;
+            }
+
+            set
+            {
+                _version = value;
+                if (Name == "MinVersion_1_0")
+                {
+                    minVersion = value;
+                }
+                else if (Name == "MaxVersion_1_0")
+                {
+                    maxVersion = value;
+                }
+
+            }
+        }
         public bool IsValid;
 
         private static Regex _regex = new Regex(@"^[\d]+\.[\d]+\.[\d]+$");
@@ -29,6 +53,17 @@ namespace PoE_2_Manifest_Maker.Communication
                     }
                 }
 
+                if (IsValid)
+                {
+                    Version versionMin = new Version(minVersion);
+                    Version versionMax = new Version(maxVersion);
+
+                    IsValid = versionMin <= versionMax;
+                    if (!IsValid)
+                    {
+                        return "The max version must be bigger or equal to the min version";
+                    }
+                }
                 return null;
             }
         }
