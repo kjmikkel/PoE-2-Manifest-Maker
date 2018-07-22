@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -209,4 +210,20 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET AppName=PoE 2 Manifest Maker
+IF NOT EXIST "$(TargetDir)%25AppName%25" mkdir "$(TargetDir)%25AppName%25"
+IF NOT EXIST "$(TargetDir)%25AppName%25\Resources" mkdir "$(TargetDir)%25AppName%25\Resources"
+
+copy "$(TargetDir)*.dll" "$(TargetDir)%25AppName%25\."
+copy "$(TargetDir)*.exe*" "$(TargetDir)%25AppName%25\."
+xcopy /s "$(TargetDir)/Resources" "$(TargetDir)%25AppName%25\Resources\."
+
+copy "$(SourceDir)..\..\..\LICENSE" "$(TargetDir)\%25AppName%25\."
+copy "$(SourceDir)..\..\..\ChangeLog.txt" "$(TargetDir)\%25AppName%25\."
+copy "$(SourceDir)..\..\..\README.md" "$(TargetDir)\%25AppName%25\."
+
+if exist "$(TargetDir)%25AppName%25.zip" del "$(TargetDir)%25AppName%25.zip"
+izarcc -a -r -p -cx "$(TargetDir)%25AppName%25.zip" "$(TargetDir)%25AppName%25\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
