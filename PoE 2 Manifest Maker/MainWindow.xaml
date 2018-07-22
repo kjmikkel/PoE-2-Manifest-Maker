@@ -1,0 +1,30 @@
+﻿<Window x:Class="PoE_2_Manifest_Maker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:view="clr-namespace:PoE_2_Manifest_Maker.View"
+        xmlns:MVVM="clr-namespace:PoE_2_Manifest_Maker.MVVM"
+        d:DataContext="{d:DesignInstance MVVM:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="PoE 2 Manifest Maker" Height="500" Width="750"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <!--
+        <Label Content="Version:" Grid.Row="0" Grid.Column="1" />
+        <ComboBox Name="VersionComboBox" Grid.Row="0" Grid.Column="2" Margin="0,5" ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                  IsEditable="False" IsHitTestVisible="{Binding VersionEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Focusable="{Binding VersionEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                  IsEnabled="{Binding VersionEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+        <ContentPresenter Content="{Binding GUI}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" /> -->
+        <view:GUI_1_0 Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" />
+    </Grid>
+</Window>

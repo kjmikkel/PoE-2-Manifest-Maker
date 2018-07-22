@@ -1,0 +1,28 @@
+﻿using Microsoft.Practices.Prism.Events;
+using PoE_2_Manifest_Maker.Communication;
+using System.ComponentModel;
+
+namespace PoE_2_Manifest_Maker.MVVM_Helper
+{
+    public abstract class ObservableObject<T, K> : SimpleObservableObject where T : BaseChanged<K>, new()
+        where K : BaseCommunication
+
+    {
+        private readonly IEventAggregator _eventAggregator;
+        protected string name;
+
+        public ObservableObject(string name)
+        {
+            this.name = name;
+            _eventAggregator = ApplicationService.Instance.EventAggregator;
+            _eventAggregator.GetEvent<T>().Subscribe(SetData, ThreadOption.PublisherThread, true, x => x.CheckDirection(CommunicationDirection.TooComponent) && x.Name == name);
+        }
+
+        protected void Publish(K dataToPublish)
+        {
+            _eventAggregator.GetEvent<T>().Publish(dataToPublish);
+        }
+
+        protected abstract void SetData(K setData);
+    }
+}
