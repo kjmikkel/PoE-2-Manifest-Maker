@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using PoE_2_Manifest_Maker.MVVM;
+using PoE_2_Manifest_Maker.MVVM_Helper;
 
 namespace PoE_2_Manifest_Maker.View
 {

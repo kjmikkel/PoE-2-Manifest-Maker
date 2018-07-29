@@ -17,7 +17,7 @@ namespace PoE_2_Manifest_Maker.MVVM
             set
             {
                 _text = value;
-                FreeformCommunication textboxCommunication = new FreeformCommunication(name, _text, CommunicationDirection.FromComponent);
+                FreeformCommunication textboxCommunication = new FreeformCommunication(Name, _text, CommunicationDirection.FromComponent);
                 Publish(textboxCommunication);
             }
         }

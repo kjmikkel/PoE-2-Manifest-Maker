@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PoE_2_Manifest_Maker.View"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="800">
+             d:DesignHeight="900" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -20,6 +20,8 @@
             <RowDefinition Height="0.4*"/>
             <RowDefinition Height="0.4*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="1.8*"/>
         </Grid.RowDefinitions>
 
         <local:LoadSave_GUI Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
@@ -47,5 +49,8 @@
 
         <Label Content="Max Version:" Grid.Row="6" Grid.Column="1" />
         <local:GameVersion_1_0 x:Name="MaxVersion_1_0" Grid.Row="7" Grid.Column="1" />
+
+        <Label Content="Image:" Grid.Row="8" Grid.Column="0" />
+        <local:Graphics_1_0 x:Name="Image" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" />
     </Grid>
 </UserControl>

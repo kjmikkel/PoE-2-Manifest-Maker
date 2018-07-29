@@ -110,7 +110,7 @@ namespace PoE_2_Manifest_Maker.MVVM
 
         private void Publish()
         {
-            LanguageControlCommunication communication = new LanguageControlCommunication(name, Items, CommunicationDirection.FromComponent);
+            LanguageControlCommunication communication = new LanguageControlCommunication(Name, Items, CommunicationDirection.FromComponent);
             Publish(communication);
         }
 

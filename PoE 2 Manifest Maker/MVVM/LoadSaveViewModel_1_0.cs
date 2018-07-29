@@ -5,6 +5,9 @@ using PoE_2_Manifest_Maker.Model;
 using PoE_2_Manifest_Maker.MVVM_Helper;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -25,6 +28,11 @@ namespace PoE_2_Manifest_Maker.MVVM
         private GameVersionCommunication _minVersion;
         private GameVersionCommunication _maxVersion;
 
+        private String _image;
+
+        private const int imageWidth = 149;
+        private const int imageHeight = 84;
+
         public LoadSaveViewModel_1_0()
         {
             NewFileCommand = new RelayCommand(NewFile);
@@ -37,7 +45,7 @@ namespace PoE_2_Manifest_Maker.MVVM
             _eventAggregator.GetEvent<LanguageControlChanged>().Subscribe(GetLocalizedData, ThreadOption.PublisherThread, true, CheckIncomming);
             _eventAggregator.GetEvent<GameVersionChanged>().Subscribe(GetGameVersionData, ThreadOption.PublisherThread, true, CheckIncomming);
             _eventAggregator.GetEvent<FreeformChanged>().Subscribe(GetFreeformData, ThreadOption.PublisherThread, true, CheckIncomming);
-
+            _eventAggregator.GetEvent<ImageChanged>().Subscribe(GetImage, ThreadOption.PublisherThread, true, CheckIncomming);
             Reset();
         }
 
@@ -57,6 +65,8 @@ namespace PoE_2_Manifest_Maker.MVVM
             };
 
             FileSaveLocation = "";
+
+            _image = "";
 
             SendUpdateToComponents();
         }
@@ -104,6 +114,11 @@ namespace PoE_2_Manifest_Maker.MVVM
             }
         }
 
+        private void GetImage(ImageCommunication imageData)
+        {
+            this._image = imageData.Image;
+        }
+
         private void NewFile()
         {
             Reset();
@@ -112,8 +127,10 @@ namespace PoE_2_Manifest_Maker.MVVM
         #region Load
         private void BrowseFileButton()
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.Filter = "JSON file | *.json";
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "JSON file | *.json"
+            };
             var result = openFileDialog.ShowDialog();
 
             if (result.HasValue && result.Value)
@@ -138,6 +155,12 @@ namespace PoE_2_Manifest_Maker.MVVM
 
                 Manifest = JsonConvert.DeserializeObject<Manifest_1_0>(loadedData);
 
+                String possibleImage = Path.GetDirectoryName(location) + Path.DirectorySeparatorChar + "thumb.png";
+                if (File.Exists(possibleImage))
+                {
+                    _image = possibleImage;    
+                }
+
                 SendUpdateToComponents();
             }
             else
@@ -151,15 +174,18 @@ namespace PoE_2_Manifest_Maker.MVVM
             IEventAggregator _eventAggregator = ApplicationService.Instance.EventAggregator;
 
             // Localization
-            _eventAggregator.GetEvent<LanguageControlChanged>().Publish(new LanguageControlCommunication("TitleLanguage_1_0", MakeLocalizedData(Manifest.Title), CommunicationDirection.TooComponent));
-            _eventAggregator.GetEvent<LanguageControlChanged>().Publish(new LanguageControlCommunication("DescriptionLanguage_1_0", MakeLocalizedData(Manifest.Description), CommunicationDirection.TooComponent));
+            _eventAggregator.GetEvent<LanguageControlChanged>().Publish(new LanguageControlCommunication("TitleLanguage_1_0", MakeLocalizedData(Manifest.Title), CommunicationDirection.ToComponent));
+            _eventAggregator.GetEvent<LanguageControlChanged>().Publish(new LanguageControlCommunication("DescriptionLanguage_1_0", MakeLocalizedData(Manifest.Description), CommunicationDirection.ToComponent));
 
             // Freeform text
-            _eventAggregator.GetEvent<FreeformChanged>().Publish(new FreeformCommunication("AuthorTextBox_1_0", Manifest.Author, CommunicationDirection.TooComponent));
-            _eventAggregator.GetEvent<FreeformChanged>().Publish(new FreeformCommunication("ModVersion_1_0", Manifest.ModVersion, CommunicationDirection.TooComponent));
+            _eventAggregator.GetEvent<FreeformChanged>().Publish(new FreeformCommunication("AuthorTextBox_1_0", Manifest.Author, CommunicationDirection.ToComponent));
+            _eventAggregator.GetEvent<FreeformChanged>().Publish(new FreeformCommunication("ModVersion_1_0", Manifest.ModVersion, CommunicationDirection.ToComponent));
 
-            _eventAggregator.GetEvent<GameVersionChanged>().Publish(new GameVersionCommunication("MinVersion_1_0", Manifest.SupportedGameVersion.Min, CommunicationDirection.TooComponent));
-            _eventAggregator.GetEvent<GameVersionChanged>().Publish(new GameVersionCommunication("MaxVersion_1_0", Manifest.SupportedGameVersion.Max, CommunicationDirection.TooComponent));
+            // Done in this order to ensure we won't have problems with the validation of the version (the min version must be less than the max version)
+            _eventAggregator.GetEvent<GameVersionChanged>().Publish(new GameVersionCommunication("MaxVersion_1_0", Manifest.SupportedGameVersion.Max, CommunicationDirection.ToComponent));
+            _eventAggregator.GetEvent<GameVersionChanged>().Publish(new GameVersionCommunication("MinVersion_1_0", Manifest.SupportedGameVersion.Min, CommunicationDirection.ToComponent));
+            
+            _eventAggregator.GetEvent<ImageChanged>().Publish(new ImageCommunication("Image", _image, CommunicationDirection.ToComponent));
         }
 
         private IEnumerable<LocalizedData_1_0> MakeLocalizedData(Dictionary<string, string> rawData)
@@ -212,6 +238,32 @@ namespace PoE_2_Manifest_Maker.MVVM
                     sw.Write(JsonConvert.SerializeObject(Manifest));
                 }
             }
+
+            if (File.Exists(_image))
+            {
+                Image origImage = (Image)Image.FromFile(_image).Clone();
+                string pathToImage = Path.GetDirectoryName(fileLocation) + Path.DirectorySeparatorChar + "thumb.png";
+
+                Image finalImage = origImage;
+                bool imageChange = false;
+
+                if (origImage.Width != imageWidth || origImage.Height != imageHeight)
+                {
+                    imageChange = true;
+                    finalImage = ResizeImage(origImage, imageWidth, imageHeight);
+                }
+
+                if (imageChange || _image != pathToImage)
+                {
+                    // Check if the image is already there then delete it
+                    if (File.Exists(pathToImage))
+                    {
+                        File.Delete(pathToImage);
+                    }
+
+                    finalImage.Save(pathToImage, ImageFormat.Png);
+                }
+            }
         }
 
         public bool CanSave()
@@ -222,6 +274,38 @@ namespace PoE_2_Manifest_Maker.MVVM
         private bool IsSaveValid()
         {
             return File.Exists(FileSaveLocation) && CanSave();
+        }
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Image ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
     }
 }

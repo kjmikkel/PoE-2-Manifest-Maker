@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>clipboard.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
@@ -92,9 +95,12 @@
     <Compile Include="Communication\CommunicationDirection.cs" />
     <Compile Include="Communication\FreeformChanged.cs" />
     <Compile Include="Communication\FreeformCommunication.cs" />
+    <Compile Include="Communication\ImageChanged.cs" />
+    <Compile Include="Communication\ImageCommunication.cs" />
     <Compile Include="Communication\LanguageControlCommunication.cs" />
     <Compile Include="Communication\GameVersionCommunication.cs" />
     <Compile Include="Model\Versions.cs" />
+    <Compile Include="MVVM\GraphicsViewModel_1_0.cs" />
     <Compile Include="MVVM\MainWindowViewModel.cs" />
     <Compile Include="Model\LanguageCodes.cs" />
     <Compile Include="MVVM\GameVersionViewModel_1_0.cs" />
@@ -117,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GameVersion_1_0.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Graphics_1_0.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -146,6 +156,9 @@
     </Compile>
     <Compile Include="View\GameVersion_1_0.xaml.cs">
       <DependentUpon>GameVersion_1_0.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Graphics_1_0.xaml.cs">
+      <DependentUpon>Graphics_1_0.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GUI_1_0.xaml.cs">
       <DependentUpon>GUI_1_0.xaml</DependentUpon>
@@ -208,7 +221,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="clipboard.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET AppName=PoE 2 Manifest Maker
