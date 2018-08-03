@@ -2,7 +2,11 @@
 = PoE 2 Manifest Maker =
 ========================
 
-Release 1.0.1.0 (29/07 - 2018):
+Release 1.2.0.0 (03/08 - 2018):
+-------------------------------
+* Added a a "No version" option
+
+Release 1.1.0.0 (29/07 - 2018):
 -------------------------------
 * Added application icon
 * Added simple ability to make thumbnail image
