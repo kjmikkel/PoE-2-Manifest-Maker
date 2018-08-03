@@ -11,12 +11,14 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.35*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="5,5" Text="{Binding Version, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Mode=TwoWay}" />
-        <Label Grid.Row="1" Grid.Column="0" Margin="5,5" Content="{Binding VersionError, Mode=OneWay}"  Foreground="Red" FontStyle="Italic" />
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="5,5" Text="{Binding Version, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Mode=TwoWay}" IsEnabled="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,5" IsChecked="{Binding NoVersion, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Content="No Version" />
+        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,5" Content="{Binding VersionError, Mode=OneWay}"  Foreground="Red" FontStyle="Italic" />
     </Grid>
 </UserControl>

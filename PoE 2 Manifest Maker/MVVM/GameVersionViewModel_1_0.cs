@@ -25,7 +25,28 @@ namespace PoE_2_Manifest_Maker.MVVM
                 }
 
                 _version = value;
+
+                if (String.Empty.Equals(_version) && !NoVersion)
+                    NoVersion = true;
+
                 RaisePropertyChangedEvent("Version");
+            }
+        }
+
+        public bool Enabled { get { return !_noVersion; } }
+
+        private bool _noVersion;
+        public bool NoVersion
+        {
+            get { return _noVersion; }
+            set
+            {
+                _noVersion = value;
+
+                RaisePropertyChangedEvent("NoVersion");
+                RaisePropertyChangedEvent("Enabled");
+
+                Version = _noVersion ?  "" : "1.0.0";
             }
         }
 
@@ -56,7 +77,7 @@ namespace PoE_2_Manifest_Maker.MVVM
 
         protected override void SetData(GameVersionCommunication setData)
         {
-            _version = setData.Version;
+            Version = setData.Version;
             RaisePropertyChangedEvent("Version");
         }
 

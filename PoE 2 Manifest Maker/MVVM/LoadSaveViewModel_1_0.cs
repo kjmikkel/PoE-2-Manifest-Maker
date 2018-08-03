@@ -15,14 +15,31 @@ namespace PoE_2_Manifest_Maker.MVVM
 {
     public class LoadSaveViewModel_1_0 : SimpleObservableObject
     {
-        // public String FileLoadLocation { get; set; }
+        /// <summary>
+        /// The location to save to
+        /// </summary>
         public String FileSaveLocation { get; set; }
 
+        /// <summary>
+        /// The command to make a new manifest - resetting the form
+        /// </summary>
         public RelayCommand NewFileCommand { get; private set; }
+        /// <summary>
+        /// The command to load a manifest from a file
+        /// </summary>
         public RelayCommand LoadCommand { get; private set; }
+        /// <summary>
+        /// The command to save the manifest to a  file (only available when a FileSaveLocation is set
+        /// </summary>
         public RelayCommand SaveCommand { get; private set; }
+        /// <summary>
+        /// The command to save the manifest to a specific location
+        /// </summary>
         public RelayCommand SaveAsCommand { get; private set; }
 
+        /// <summary>
+        /// The
+        /// </summary>
         public Manifest_1_0 Manifest { get; private set; }
 
         private GameVersionCommunication _minVersion;

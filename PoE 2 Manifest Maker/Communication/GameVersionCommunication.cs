@@ -46,15 +46,14 @@ namespace PoE_2_Manifest_Maker.Communication
             {
                 if (propertyName == "Version")
                 {
-                    IsValid = _regex.IsMatch(Version);
+                    IsValid = _regex.IsMatch(Version) || string.Empty.Equals(Version);
                     if (!IsValid)
-                    {
                         return "Version format is incorrect - it should be like: 'n.n.n'";
-                    }
-                }
 
-                if (IsValid)
-                {
+                    // If the versions is the empty string, then everything is ok
+                    if (string.Empty.Equals(minVersion) || string.Empty.Equals(maxVersion))
+                        return null;
+
                     Version versionMin = new Version(minVersion);
                     Version versionMax = new Version(maxVersion);
 
