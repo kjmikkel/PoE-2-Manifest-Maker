@@ -1,8 +1,6 @@
 ﻿using PoE_2_Manifest_Maker.Communication;
 using PoE_2_Manifest_Maker.MVVM_Helper;
 using System;
-using System.Drawing;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace PoE_2_Manifest_Maker.MVVM
@@ -39,14 +37,20 @@ namespace PoE_2_Manifest_Maker.MVVM
 
         private void SetImage(String imagePath)
         {
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.UriSource = new Uri(imagePath);
-            image.EndInit();
-            Image = image;
+            if (!String.IsNullOrEmpty(imagePath))
+            {
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = new Uri(imagePath);
+                image.EndInit();
+                Image = image;
+            }
+            else
+            {
+                Image = null;
+            }
 
-            //this.Image = new ImageSource(setData.Image);
             RaisePropertyChangedEvent("Image");
 
         }

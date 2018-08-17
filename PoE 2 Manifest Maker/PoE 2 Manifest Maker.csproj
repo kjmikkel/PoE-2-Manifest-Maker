@@ -222,7 +222,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="clipboard.ico" />
@@ -239,7 +241,7 @@ xcopy /s "$(TargetDir)/Resources" "$(TargetDir)%25AppName%25\Resources\."
 
 copy "$(SourceDir)..\..\..\LICENSE" "$(TargetDir)\%25AppName%25\."
 copy "$(SourceDir)..\..\..\ChangeLog.txt" "$(TargetDir)\%25AppName%25\."
-copy "$(SourceDir)..\..\..\README.md" "$(TargetDir)\%25AppName%25\."
+copy "$(SourceDir)..\..\..\ReadMe.txt" "$(TargetDir)\%25AppName%25\."
 
 if exist "$(TargetDir)%25AppName%25.zip" del "$(TargetDir)%25AppName%25.zip"
 izarcc -a -r -p -cx "$(TargetDir)%25AppName%25.zip" "$(TargetDir)%25AppName%25\"</PostBuildEvent>
