@@ -1,4 +1,4 @@
-PoE 2 Manifest Maker - 1.2
+PoE 2 Manifest Maker - 1.3
 
 :: REQUIREMENTS ::
 You will need:
