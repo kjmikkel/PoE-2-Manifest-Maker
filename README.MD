@@ -3,7 +3,7 @@ An application to make manifests for mods for the computer game Pillars of Etern
 
 Mods for Deadfire can have a manifest file that contains metadata information (such as version and for which version of Deadfire it will work for).
 
-#Future plans
+# Future plans
 In the future the Manifest Maker may get more advanced thumbnail manipulation.
 
 # Technical details
