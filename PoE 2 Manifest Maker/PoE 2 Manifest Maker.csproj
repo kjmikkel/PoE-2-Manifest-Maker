@@ -34,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>SecurityRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>clipboard.ico</ApplicationIcon>
@@ -232,25 +233,30 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>REM Check if izarcc program exists, if so, zip the app
+    <PostBuildEvent>REM Work like a normal programming language you POS!
+setlocal enabledelayedexpansion
+
+REM Check if izarcc program exists, if so, zip the app
 where /q izarcc
 if ERRORLEVEL 1 (
     EXIT /B
 ) ELSE (
     SET AppName=PoE 2 Manifest Maker
-    IF NOT EXIST "$(TargetDir)%25AppName%25" mkdir "$(TargetDir)%25AppName%25"
-    IF NOT EXIST "$(TargetDir)%25AppName%25\Resources" mkdir "$(TargetDir)%25AppName%25\Resources"
 
-    copy "$(TargetDir)*.dll" "$(TargetDir)%25AppName%25\."
-    copy "$(TargetDir)*.exe*" "$(TargetDir)%25AppName%25\."
-    xcopy /s "$(TargetDir)/Resources" "$(TargetDir)%25AppName%25\Resources\."
+    IF NOT EXIST "$(TargetDir)!AppName!" mkdir "$(TargetDir)!AppName!"
+    IF NOT EXIST "$(TargetDir)!AppName!\Resources" mkdir "$(TargetDir)!AppName!\Resources"
 
-    copy "$(SourceDir)..\..\..\LICENSE" "$(TargetDir)\%25AppName%25\."
-    copy "$(SourceDir)..\..\..\ChangeLog.txt" "$(TargetDir)\%25AppName%25\."
-    copy "$(SourceDir)..\..\..\ReadMe.txt" "$(TargetDir)\%25AppName%25\."
+    copy "$(TargetDir)*.dll" "$(TargetDir)!AppName!\."
+    copy "$(TargetDir)*.exe*" "$(TargetDir)!AppName!\."
+    xcopy /s "$(TargetDir)/Resources" "$(TargetDir)!AppName!\Resources\."
 
-    if exist "$(TargetDir)%25AppName%25.zip" del "$(TargetDir)%25AppName%25.zip"
-    izarcc -a -r -p -cx "$(TargetDir)%25AppName%25.zip" "$(TargetDir)%25AppName%25\"
+    copy "$(SourceDir)..\..\..\LICENSE" "$(TargetDir)\!AppName!\."
+    copy "$(SourceDir)..\..\..\ChangeLog.txt" "$(TargetDir)\!AppName!\."
+    copy "$(SourceDir)..\..\..\ReadMe.txt" "$(TargetDir)\!AppName!\."
+
+    if exist "$(TargetDir)!AppName!.zip" del "$(TargetDir)!AppName!.zip"
+    
+    izarcc -a -r -p -cx "$(TargetDir)!AppName!.zip" "$(TargetDir)!AppName!\"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
