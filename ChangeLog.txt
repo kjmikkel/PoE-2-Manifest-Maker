@@ -2,6 +2,10 @@
 = PoE 2 Manifest Maker =
 ========================
 
+Release 1.3.0.0 (29/07 - 2023):
+-------------------------------
+* Fixed a security flaw by updating a used package
+
 Release 1.2.0.0 (03/08 - 2018):
 -------------------------------
 * Added a a "No version" option

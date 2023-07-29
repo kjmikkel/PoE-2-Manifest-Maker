@@ -1,8 +1,8 @@
-PoE 2 Manifest Maker - 1.3
+PoE 2 Manifest Maker - 1.4
 
 :: REQUIREMENTS ::
 You will need:
-Windows:  Windows .NET Framework 4.5+
+Windows:  Windows .NET Framework 4.8+
 Linux and Mac: Mono 4.2.1.102+
 
 :: FEATURES ::
